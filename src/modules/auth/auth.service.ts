@@ -22,7 +22,7 @@ export class AuthService {
     return await this.usersRepository.save(newUser);
   }
 
-  async validateUser(username: string, pass: string): Promise<any> {
+  async validateUser(username: string, pass: string): Promise<Partial<UserEntity> | null> {
     const user = await this.usersRepository.findOne({ where: { username } });
     if (user && (await bcrypt.compare(pass, user.passwordHash))) {
       const { passwordHash, ...result } = user;
@@ -31,7 +31,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
+  async login(user: UserEntity) {
     const payload = { username: user.username, sub: user.id };
     return {
       access_token: this.jwtService.sign(payload),
