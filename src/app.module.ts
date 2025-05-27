@@ -1,0 +1,30 @@
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './modules/users/users.module';
+import { ProductsModule } from './modules/products/products.module';
+import { OrdersModule } from './modules/orders/orders.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { databaseConfig } from './config/database.config';
+import { UserEntity } from './entities/user.entity';
+import { ProductEntity } from './entities/product.entity';
+import { OrderEntity } from './entities/order.entity';
+
+@Module({
+  imports: [
+    TypeOrmModule.forRoot({
+      type: databaseConfig.type,
+      host: databaseConfig.host,
+      port: databaseConfig.port,
+      username: databaseConfig.username,
+      password: databaseConfig.password,
+      database: databaseConfig.database,
+      entities: [UserEntity, ProductEntity, OrderEntity],
+      synchronize: true,
+    }),
+    UsersModule,
+    ProductsModule,
+    OrdersModule,
+    AuthModule,
+  ],
+})
+export class AppModule { }
